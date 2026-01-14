@@ -31,6 +31,7 @@ const BulkRequest = require('./BulkRequest');
 const Quote = require('./Quote');
 const SubscriptionPlan = require('./SubscriptionPlan');
 const UserSubscription = require('./UserSubscription');
+const Certification = require('./Certification');
 
 // Module 1: Auth
 User.hasMany(VerificationToken, { foreignKey: 'user_id' });
@@ -161,7 +162,7 @@ Quote.belongsTo(BulkRequest, { foreignKey: 'bulk_request_id' });
 User.hasMany(Quote, { foreignKey: 'gaushala_id' });
 Quote.belongsTo(User, { as: 'Gaushala', foreignKey: 'gaushala_id' });
 
-// Module 14: Subscription Management [NEW]
+// Module 14: Subscription Management
 User.hasMany(SubscriptionPlan, { foreignKey: 'gaushala_id', onDelete: 'CASCADE' });
 SubscriptionPlan.belongsTo(User, { foreignKey: 'gaushala_id' });
 
@@ -173,6 +174,10 @@ UserSubscription.belongsTo(User, { foreignKey: 'user_id' });
 
 SubscriptionPlan.hasMany(UserSubscription, { foreignKey: 'plan_id' });
 UserSubscription.belongsTo(SubscriptionPlan, { foreignKey: 'plan_id' });
+
+// Module 15: Quality Certification [NEW]
+User.hasMany(Certification, { foreignKey: 'gaushala_id', onDelete: 'CASCADE' });
+Certification.belongsTo(User, { foreignKey: 'gaushala_id' });
 
 const syncDatabase = async () => {
   try {
@@ -219,5 +224,6 @@ module.exports = {
   Quote,
   SubscriptionPlan,
   UserSubscription,
+  Certification,
   syncDatabase
 };
