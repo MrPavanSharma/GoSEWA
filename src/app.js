@@ -17,6 +17,7 @@ const transporterRoutes = require('./routes/transporterRoutes');
 const bulkRoutes = require('./routes/bulkRoutes');
 const subscriptionRoutes = require('./routes/subscriptionRoutes');
 const certificationRoutes = require('./routes/certificationRoutes');
+const schemeRoutes = require('./routes/schemeRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -41,6 +42,7 @@ app.use('/api/v1/transporter', transporterRoutes);
 app.use('/api/v1/bulk', bulkRoutes);
 app.use('/api/v1/subscription', subscriptionRoutes);
 app.use('/api/v1/certification', certificationRoutes);
+app.use('/api/v1/schemes', schemeRoutes);
 
 // Health Check
 app.get('/health', (req, res) => {
