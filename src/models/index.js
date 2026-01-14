@@ -20,6 +20,9 @@ const Payment = require('./Payment');
 const PaymentMethod = require('./PaymentMethod');
 const Invoice = require('./Invoice');
 const Refund = require('./Refund');
+const Review = require('./Review');
+const Notification = require('./Notification');
+const NotificationTemplate = require('./NotificationTemplate');
 
 // Module 1: Auth
 User.hasMany(VerificationToken, { foreignKey: 'user_id' });
@@ -102,6 +105,23 @@ Invoice.belongsTo(Order, { foreignKey: 'order_id' });
 Payment.hasMany(Refund, { foreignKey: 'payment_id' });
 Refund.belongsTo(Payment, { foreignKey: 'payment_id' });
 
+// Module 7: Reviews
+User.hasMany(Review, { foreignKey: 'user_id', as: 'WrittenReviews' });
+Review.belongsTo(User, { foreignKey: 'user_id', as: 'Author' });
+
+User.hasMany(Review, { foreignKey: 'gaushala_id', as: 'ReceivedReviews' });
+Review.belongsTo(User, { foreignKey: 'gaushala_id', as: 'Gaushala' });
+
+Product.hasMany(Review, { foreignKey: 'product_id' });
+Review.belongsTo(Product, { foreignKey: 'product_id' });
+
+Order.hasMany(Review, { foreignKey: 'order_id' });
+Review.belongsTo(Order, { foreignKey: 'order_id' });
+
+// Module 8: Notifications
+User.hasMany(Notification, { foreignKey: 'user_id', onDelete: 'CASCADE' });
+Notification.belongsTo(User, { foreignKey: 'user_id' });
+
 const syncDatabase = async () => {
   try {
     await sequelize.authenticate();
@@ -136,5 +156,8 @@ module.exports = {
   PaymentMethod,
   Invoice,
   Refund,
+  Review,
+  Notification,
+  NotificationTemplate,
   syncDatabase
 };
