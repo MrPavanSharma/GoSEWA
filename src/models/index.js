@@ -23,6 +23,7 @@ const Refund = require('./Refund');
 const Review = require('./Review');
 const Notification = require('./Notification');
 const NotificationTemplate = require('./NotificationTemplate');
+const Shipment = require('./Shipment');
 
 // Module 1: Auth
 User.hasMany(VerificationToken, { foreignKey: 'user_id' });
@@ -122,6 +123,10 @@ Review.belongsTo(Order, { foreignKey: 'order_id' });
 User.hasMany(Notification, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 Notification.belongsTo(User, { foreignKey: 'user_id' });
 
+// Module 10: Logistics [NEW]
+Order.hasOne(Shipment, { foreignKey: 'order_id', onDelete: 'CASCADE' });
+Shipment.belongsTo(Order, { foreignKey: 'order_id' });
+
 const syncDatabase = async () => {
   try {
     await sequelize.authenticate();
@@ -159,5 +164,6 @@ module.exports = {
   Review,
   Notification,
   NotificationTemplate,
+  Shipment,
   syncDatabase
 };
