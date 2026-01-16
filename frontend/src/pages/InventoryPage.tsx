@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { getMyProducts, createProduct, deleteProduct, getCategories, createCategory } from '../services/inventory.service';
-import { Plus, Trash, X } from 'lucide-react';
+import { getMyProducts, createProduct, getCategories, createCategory } from '../services/inventory.service';
+import { Plus, X } from 'lucide-react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -44,10 +44,7 @@ const InventoryPage: React.FC = () => {
         fetchData();
     }, []);
 
-    const handleDelete = async (id: string) => {
-         // Delete not fully implemented in backend yet
-         alert('Delete feature coming soon');
-    };
+
 
     return (
         <div>
@@ -173,7 +170,7 @@ const ProductForm = ({ categories, onSuccess }: { categories: any[], onSuccess: 
                      {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                      {categories.length === 0 && <option value="">Loading categories...</option>}
                 </select>
-                {formik.touched.category_id && formik.errors.category_id && <div style={errStyle}>{formik.errors.category_id}</div>}
+                {formik.touched.category_id && formik.errors.category_id && <div style={errStyle}>{formik.errors.category_id as string}</div>}
             </div>
 
             <div style={{display: 'flex', gap: '1rem', marginBottom: '1rem'}}>

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { TrendingUp, DollarSign, ShoppingBag, Users } from 'lucide-react';
 import { getSalesAnalytics, getRevenueMetrics, getTopProducts } from '../services/analytics.service';
-import toast from 'react-hot-toast';
+
 
 const AnalyticsPage: React.FC = () => {
     const [salesData, setSalesData] = useState<any[]>([]);
@@ -162,7 +162,7 @@ const AnalyticsPage: React.FC = () => {
                                 fill="#8884d8"
                                 dataKey="sales"
                             >
-                                {topProducts.map((entry, index) => (
+                                {topProducts.map((_, index) => (
                                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                 ))}
                             </Pie>

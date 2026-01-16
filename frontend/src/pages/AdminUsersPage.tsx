@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getAdminUsers, verifyUser, suspendUser } from '../services/admin.service';
-import { Users, CheckCircle, XCircle } from 'lucide-react';
+import { CheckCircle, XCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const AdminUsersPage: React.FC = () => {

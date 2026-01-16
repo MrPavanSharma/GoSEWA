@@ -16,7 +16,7 @@ export const createProduct = async (data: any) => {
     return response.data;
 };
 
-export const deleteProduct = async (id: string) => {
+export const deleteProduct = async (_id: string) => {
     // Note: InventoryRoutes doesn't have DELETE /products/:id explicitly listed in the viewed file?
     // Let's check inventoryRoutes again. 
     // It has createProduct, getProducts, getProductDetails, updateInventory, getInventoryLogs.

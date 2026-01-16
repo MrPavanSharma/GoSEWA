@@ -6,13 +6,20 @@ import App from './App.tsx';
 import { AuthProvider } from './context/auth.context.tsx';
 import './index.css';
 
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
+// REPLACE WITH YOUR ACTUAL GOOGLE CLIENT ID
+const GOOGLE_CLIENT_ID = "YOUR_GOOGLE_CLIENT_ID";
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <AuthProvider>
-        <App />
-        <Toaster position="top-right" />
-      </AuthProvider>
-    </BrowserRouter>
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <BrowserRouter>
+        <AuthProvider>
+          <App />
+          <Toaster position="top-right" />
+        </AuthProvider>
+      </BrowserRouter>
+    </GoogleOAuthProvider>
   </React.StrictMode>,
 );

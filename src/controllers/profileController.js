@@ -23,7 +23,16 @@ exports.getProfile = async (req, res) => {
 // Update profile details
 exports.updateProfile = async (req, res) => {
   try {
-    const { full_name, business_name, business_type, gst_number, pan_number, description } = req.body;
+    const { 
+      full_name, business_name, business_type, gst_number, pan_number, description,
+      // Gaushala Fields
+      gaushala_name, gaushala_address, registration_number, establishment_year, ownership_type
+    } = req.body;
+
+    // Update User (Base) fields
+    await User.update({
+      gaushala_name, gaushala_address, registration_number, establishment_year, ownership_type
+    }, { where: { id: req.user.id } });
     
     let profile = await UserProfile.findOne({ where: { user_id: req.user.id } });
 
@@ -40,6 +49,43 @@ exports.updateProfile = async (req, res) => {
 
     res.json({ success: true, message: 'Profile updated', data: profile });
   } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+// Upload Profile Photo
+exports.uploadProfilePhoto = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: 'No file uploaded' });
+    }
+
+    // Create full URL (assuming server runs on port 3000)
+    // In production, use env variable for base URL
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
+    const profileImageUrl = `${baseUrl}/uploads/profiles/${req.file.filename}`;
+
+    let profile = await UserProfile.findOne({ where: { user_id: req.user.id } });
+
+    if (profile) {
+      await profile.update({ profile_image_url: profileImageUrl });
+    } else {
+      // Create profile if it doesn't exist (minimal)
+      profile = await UserProfile.create({
+        user_id: req.user.id,
+        full_name: req.user.full_name || 'User', // Fallback
+        profile_image_url: profileImageUrl,
+        verification_status: 'PENDING'
+      });
+    }
+
+    res.json({ 
+      success: true, 
+      message: 'Profile photo uploaded successfully', 
+      data: { profile_image_url: profileImageUrl } 
+    });
+  } catch (error) {
+    console.error('Upload Error:', error);
     res.status(500).json({ success: false, error: error.message });
   }
 };

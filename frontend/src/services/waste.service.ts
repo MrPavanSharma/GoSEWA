@@ -26,6 +26,12 @@ export const getWasteStats = async () => {
     return response.data;
 };
 
+
+export const updateWasteLog = async (id: string, data: any) => {
+    const response = await api.put(`/waste/logs/${id}`, data);
+    return response.data;
+};
+
 export const deleteWasteLog = async (id: string) => {
     const response = await api.delete(`/waste/logs/${id}`);
     return response.data;

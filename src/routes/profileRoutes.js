@@ -2,11 +2,13 @@ const express = require('express');
 const router = express.Router();
 const profileController = require('../controllers/profileController');
 const authMiddleware = require('../middleware/authMiddleware');
+const upload = require('../middleware/uploadMiddleware');
 
 router.use(authMiddleware); // Protect all profile routes
 
 router.get('/', profileController.getProfile);
 router.put('/', profileController.updateProfile);
+router.post('/photo', upload.single('profileImage'), profileController.uploadProfilePhoto);
 
 router.post('/addresses', profileController.addAddress);
 router.put('/addresses/:id', profileController.updateAddress);

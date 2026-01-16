@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { getLivestock, createLivestock, deleteLivestock, addHealthRecord } from '../services/livestock.service';
-import { Plus, Trash2, Heart, Calendar, Activity } from 'lucide-react';
+import { getLivestock, createLivestock, deleteLivestock, addHealthRecord, updateLivestock } from '../services/livestock.service';
+import { Plus, Trash2, Heart, Activity, Edit } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const LivestockPage: React.FC = () => {
@@ -10,6 +10,7 @@ const LivestockPage: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [showAddForm, setShowAddForm] = useState(false);
     const [selectedAnimal, setSelectedAnimal] = useState<any>(null);
+    const [editId, setEditId] = useState<string | null>(null);
     const [showHealthForm, setShowHealthForm] = useState(false);
 
     useEffect(() => {
@@ -45,19 +46,40 @@ const LivestockPage: React.FC = () => {
         }),
         onSubmit: async (values) => {
             try {
-                await createLivestock({
-                    ...values,
-                    age: values.age ? parseInt(values.age) : undefined
-                });
-                toast.success('Livestock added successfully!');
+                if (editId) {
+                    await updateLivestock(editId, {
+                        ...values,
+                        age: values.age ? parseInt(values.age) : undefined
+                    });
+                    toast.success('Livestock updated successfully!');
+                } else {
+                    await createLivestock({
+                        ...values,
+                        age: values.age ? parseInt(values.age) : undefined
+                    });
+                    toast.success('Livestock added successfully!');
+                }
                 setShowAddForm(false);
+                setEditId(null);
                 livestockForm.resetForm();
                 fetchLivestock();
             } catch (error: any) {
-                toast.error(error.response?.data?.message || 'Failed to add livestock');
+                toast.error(error.response?.data?.message || `Failed to ${editId ? 'update' : 'add'} livestock`);
             }
         },
     });
+
+    const handleEdit = (animal: any) => {
+        setEditId(animal.id);
+        livestockForm.setValues({
+            tag_id: animal.tag_id,
+            type: animal.type,
+            breed: animal.breed || '',
+            age: animal.age ? animal.age.toString() : '',
+            health_status: animal.health_status
+        });
+        setShowAddForm(true);
+    };
 
     const healthForm = useFormik({
         initialValues: {
@@ -119,7 +141,11 @@ const LivestockPage: React.FC = () => {
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem'}}>
                 <h1 style={{margin: 0}}>Livestock Management</h1>
                 <button
-                    onClick={() => setShowAddForm(true)}
+                    onClick={() => {
+                        setEditId(null);
+                        livestockForm.resetForm();
+                        setShowAddForm(true);
+                    }}
                     style={{
                         padding: '0.75rem 1.5rem',
                         background: '#3182ce',
@@ -187,6 +213,19 @@ const LivestockPage: React.FC = () => {
 
                             <div style={{display: 'flex', gap: '0.5rem'}}>
                                 <button
+                                    onClick={() => handleEdit(animal)}
+                                    style={{
+                                        padding: '0.75rem',
+                                        background: '#edf2f7',
+                                        color: '#4a5568',
+                                        border: 'none',
+                                        borderRadius: '6px',
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    <Edit size={16} />
+                                </button>
+                                <button
                                     onClick={() => {
                                         setSelectedAnimal(animal);
                                         setShowHealthForm(true);
@@ -242,7 +281,7 @@ const LivestockPage: React.FC = () => {
                     zIndex: 1000
                 }}>
                     <div style={{background: 'white', padding: '2rem', borderRadius: '12px', width: '500px', maxHeight: '90vh', overflowY: 'auto'}}>
-                        <h2 style={{margin: '0 0 1.5rem 0'}}>Add New Livestock</h2>
+                        <h2 style={{margin: '0 0 1.5rem 0'}}>{editId ? 'Edit Livestock' : 'Add New Livestock'}</h2>
                         <form onSubmit={livestockForm.handleSubmit}>
                             <div style={{marginBottom: '1rem'}}>
                                 <label style={{display: 'block', marginBottom: '0.5rem', fontWeight: 500}}>Tag ID</label>
@@ -298,12 +337,13 @@ const LivestockPage: React.FC = () => {
                                         cursor: 'pointer'
                                     }}
                                 >
-                                    Add Livestock
+                                    {editId ? 'Update Livestock' : 'Add Livestock'}
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => {
                                         setShowAddForm(false);
+                                        setEditId(null);
                                         livestockForm.resetForm();
                                     }}
                                     style={{

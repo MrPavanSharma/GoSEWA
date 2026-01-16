@@ -19,6 +19,14 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     unique: true
   },
+  full_name: {
+    type: DataTypes.STRING,
+    allowNull: true // Allow null for now to be safe, or false if strictly required
+  },
+  google_id: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
   password_hash: {
     type: DataTypes.STRING,
     allowNull: false
@@ -34,6 +42,27 @@ const User = sequelize.define('User', {
   is_active: {
     type: DataTypes.BOOLEAN,
     defaultValue: true
+  },
+  // Gaushala Specific Fields
+  gaushala_name: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  gaushala_address: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  registration_number: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  establishment_year: {
+    type: DataTypes.INTEGER,
+    allowNull: true
+  },
+  ownership_type: {
+    type: DataTypes.ENUM('trust', 'individual', 'private', 'government', 'ngo', 'other'),
+    allowNull: true
   }
 }, {
   timestamps: true,

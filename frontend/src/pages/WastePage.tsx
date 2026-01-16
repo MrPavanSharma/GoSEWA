@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { getWasteLogs, createWasteLog, getWasteStats, deleteWasteLog } from '../services/waste.service';
-import { Plus, Trash2, TrendingUp, Calendar } from 'lucide-react';
+import { getWasteLogs, createWasteLog, getWasteStats, deleteWasteLog, updateWasteLog } from '../services/waste.service';
+import { Plus, Trash2, TrendingUp, Calendar, Edit } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const WastePage: React.FC = () => {
@@ -10,6 +10,7 @@ const WastePage: React.FC = () => {
     const [stats, setStats] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [showAddForm, setShowAddForm] = useState(false);
+    const [editId, setEditId] = useState<string | null>(null);
 
     useEffect(() => {
         fetchData();
@@ -49,19 +50,40 @@ const WastePage: React.FC = () => {
         }),
         onSubmit: async (values) => {
             try {
-                await createWasteLog({
-                    ...values,
-                    quantity: parseFloat(values.quantity)
-                });
-                toast.success('Waste log added successfully!');
+                if (editId) {
+                    await updateWasteLog(editId, {
+                        ...values,
+                        quantity: parseFloat(values.quantity)
+                    });
+                    toast.success('Waste log updated successfully!');
+                } else {
+                    await createWasteLog({
+                        ...values,
+                        quantity: parseFloat(values.quantity)
+                    });
+                    toast.success('Waste log added successfully!');
+                }
                 setShowAddForm(false);
+                setEditId(null);
                 wasteForm.resetForm();
                 fetchData();
             } catch (error: any) {
-                toast.error(error.response?.data?.message || 'Failed to add waste log');
+                toast.error(error.response?.data?.message || `Failed to ${editId ? 'update' : 'add'} waste log`);
             }
         },
     });
+
+    const handleEdit = (log: any) => {
+        setEditId(log.id);
+        wasteForm.setValues({
+            waste_type: log.waste_type,
+            quantity: log.quantity.toString(),
+            unit: log.unit,
+            collection_date: log.collection_date.split('T')[0],
+            notes: log.notes || ''
+        });
+        setShowAddForm(true);
+    };
 
     const handleDelete = async (id: string) => {
         if (!window.confirm('Are you sure you want to delete this log?')) return;
@@ -91,7 +113,11 @@ const WastePage: React.FC = () => {
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem'}}>
                 <h1 style={{margin: 0}}>Waste Logging</h1>
                 <button
-                    onClick={() => setShowAddForm(true)}
+                    onClick={() => {
+                        setEditId(null);
+                        wasteForm.resetForm();
+                        setShowAddForm(true);
+                    }}
                     style={{
                         padding: '0.75rem 1.5rem',
                         background: '#3182ce',
@@ -221,19 +247,34 @@ const WastePage: React.FC = () => {
                                         {log.notes || '-'}
                                     </td>
                                     <td style={{padding: '1rem', textAlign: 'center'}}>
-                                        <button
-                                            onClick={() => handleDelete(log.id)}
-                                            style={{
-                                                padding: '0.5rem',
-                                                background: '#fff5f5',
-                                                color: '#e53e3e',
-                                                border: 'none',
-                                                borderRadius: '6px',
-                                                cursor: 'pointer'
-                                            }}
-                                        >
-                                            <Trash2 size={16} />
-                                        </button>
+                                        <div style={{display: 'flex', justifyContent: 'center', gap: '0.5rem'}}>
+                                            <button
+                                                onClick={() => handleEdit(log)}
+                                                style={{
+                                                    padding: '0.5rem',
+                                                    background: '#edf2f7',
+                                                    color: '#4a5568',
+                                                    border: 'none',
+                                                    borderRadius: '6px',
+                                                    cursor: 'pointer'
+                                                }}
+                                            >
+                                                <Edit size={16} />
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(log.id)}
+                                                style={{
+                                                    padding: '0.5rem',
+                                                    background: '#fff5f5',
+                                                    color: '#e53e3e',
+                                                    border: 'none',
+                                                    borderRadius: '6px',
+                                                    cursor: 'pointer'
+                                                }}
+                                            >
+                                                <Trash2 size={16} />
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
@@ -257,7 +298,7 @@ const WastePage: React.FC = () => {
                     zIndex: 1000
                 }}>
                     <div style={{background: 'white', padding: '2rem', borderRadius: '12px', width: '500px'}}>
-                        <h2 style={{margin: '0 0 1.5rem 0'}}>Log Waste Collection</h2>
+                        <h2 style={{margin: '0 0 1.5rem 0'}}>{editId ? 'Edit Waste Log' : 'Log Waste Collection'}</h2>
                         <form onSubmit={wasteForm.handleSubmit}>
                             <div style={{marginBottom: '1rem'}}>
                                 <label style={{display: 'block', marginBottom: '0.5rem', fontWeight: 500}}>Waste Type</label>
@@ -327,12 +368,13 @@ const WastePage: React.FC = () => {
                                         cursor: 'pointer'
                                     }}
                                 >
-                                    Add Log
+                                    {editId ? 'Update Log' : 'Add Log'}
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => {
                                         setShowAddForm(false);
+                                        setEditId(null);
                                         wasteForm.resetForm();
                                     }}
                                     style={{

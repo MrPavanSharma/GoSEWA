@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { getProductionLogs, createProductionLog, getProductionStats, deleteProductionLog } from '../services/production.service';
-import { Plus, Trash2, TrendingUp } from 'lucide-react';
+import { getProductionLogs, createProductionLog, getProductionStats, deleteProductionLog, updateProductionLog } from '../services/production.service';
+import { Plus, Trash2, TrendingUp, Edit } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import toast from 'react-hot-toast';
 
@@ -11,6 +11,7 @@ const ProductionPage: React.FC = () => {
     const [stats, setStats] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [showAddForm, setShowAddForm] = useState(false);
+    const [editId, setEditId] = useState<string | null>(null);
 
     useEffect(() => {
         fetchData();
@@ -50,19 +51,40 @@ const ProductionPage: React.FC = () => {
         }),
         onSubmit: async (values) => {
             try {
-                await createProductionLog({
-                    ...values,
-                    quantity: parseFloat(values.quantity)
-                });
-                toast.success('Production log added successfully!');
+                if (editId) {
+                    await updateProductionLog(editId, {
+                        ...values,
+                        quantity: parseFloat(values.quantity)
+                    });
+                    toast.success('Production log updated successfully!');
+                } else {
+                    await createProductionLog({
+                        ...values,
+                        quantity: parseFloat(values.quantity)
+                    });
+                    toast.success('Production log added successfully!');
+                }
                 setShowAddForm(false);
+                setEditId(null);
                 productionForm.resetForm();
                 fetchData();
             } catch (error: any) {
-                toast.error(error.response?.data?.message || 'Failed to add production log');
+                toast.error(error.response?.data?.message || `Failed to ${editId ? 'update' : 'add'} production log`);
             }
         },
     });
+
+    const handleEdit = (log: any) => {
+        setEditId(log.id);
+        productionForm.setValues({
+            product_type: log.product_type,
+            quantity: log.quantity.toString(),
+            unit: log.unit,
+            production_date: log.production_date.split('T')[0],
+            notes: log.notes || ''
+        });
+        setShowAddForm(true);
+    };
 
     const handleDelete = async (id: string) => {
         if (!window.confirm('Are you sure you want to delete this log?')) return;
@@ -110,7 +132,11 @@ const ProductionPage: React.FC = () => {
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem'}}>
                 <h1 style={{margin: 0}}>Production Tracking</h1>
                 <button
-                    onClick={() => setShowAddForm(true)}
+                    onClick={() => {
+                        setEditId(null);
+                        productionForm.resetForm();
+                        setShowAddForm(true);
+                    }}
                     style={{
                         padding: '0.75rem 1.5rem',
                         background: '#3182ce',
@@ -257,19 +283,34 @@ const ProductionPage: React.FC = () => {
                                         {log.notes || '-'}
                                     </td>
                                     <td style={{padding: '1rem', textAlign: 'center'}}>
-                                        <button
-                                            onClick={() => handleDelete(log.id)}
-                                            style={{
-                                                padding: '0.5rem',
-                                                background: '#fff5f5',
-                                                color: '#e53e3e',
-                                                border: 'none',
-                                                borderRadius: '6px',
-                                                cursor: 'pointer'
-                                            }}
-                                        >
-                                            <Trash2 size={16} />
-                                        </button>
+                                        <div style={{display: 'flex', justifyContent: 'center', gap: '0.5rem'}}>
+                                            <button
+                                                onClick={() => handleEdit(log)}
+                                                style={{
+                                                    padding: '0.5rem',
+                                                    background: '#edf2f7',
+                                                    color: '#4a5568',
+                                                    border: 'none',
+                                                    borderRadius: '6px',
+                                                    cursor: 'pointer'
+                                                }}
+                                            >
+                                                <Edit size={16} />
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(log.id)}
+                                                style={{
+                                                    padding: '0.5rem',
+                                                    background: '#fff5f5',
+                                                    color: '#e53e3e',
+                                                    border: 'none',
+                                                    borderRadius: '6px',
+                                                    cursor: 'pointer'
+                                                }}
+                                            >
+                                                <Trash2 size={16} />
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
@@ -293,7 +334,7 @@ const ProductionPage: React.FC = () => {
                     zIndex: 1000
                 }}>
                     <div style={{background: 'white', padding: '2rem', borderRadius: '12px', width: '500px'}}>
-                        <h2 style={{margin: '0 0 1.5rem 0'}}>Log Production</h2>
+                        <h2 style={{margin: '0 0 1.5rem 0'}}>{editId ? 'Edit Production Log' : 'Log Production'}</h2>
                         <form onSubmit={productionForm.handleSubmit}>
                             <div style={{marginBottom: '1rem'}}>
                                 <label style={{display: 'block', marginBottom: '0.5rem', fontWeight: 500}}>Product Type</label>
@@ -367,12 +408,13 @@ const ProductionPage: React.FC = () => {
                                         cursor: 'pointer'
                                     }}
                                 >
-                                    Add Log
+                                    {editId ? 'Update Log' : 'Add Log'}
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => {
                                         setShowAddForm(false);
+                                        setEditId(null);
                                         productionForm.resetForm();
                                     }}
                                     style={{

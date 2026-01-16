@@ -27,6 +27,12 @@ export const getProductionStats = async () => {
     return response.data;
 };
 
+
+export const updateProductionLog = async (id: string, data: any) => {
+    const response = await api.put(`/production/logs/${id}`, data);
+    return response.data;
+};
+
 export const deleteProductionLog = async (id: string) => {
     const response = await api.delete(`/production/logs/${id}`);
     return response.data;

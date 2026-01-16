@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getMarketplaceProducts, addToCart } from '../services/marketplace.service';
 import { getCategories } from '../services/inventory.service';
-import { Search, ShoppingCart, Filter } from 'lucide-react';
+import { Search, ShoppingCart } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 

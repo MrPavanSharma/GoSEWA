@@ -45,6 +45,7 @@ app.use('/api/v1/auth', authLimiter); // Stricter Auth Limit
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use('/uploads', express.static('uploads'));
 
 // Routes
 app.use('/api/v1/auth', authRoutes);

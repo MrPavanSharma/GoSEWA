@@ -107,3 +107,60 @@
 .link a:hover {
   text-decoration: underline;
 }
+
+.passwordWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.eyeBtn {
+  position: absolute;
+  right: 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #718096;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.eyeBtn:hover {
+  color: #4a5568;
+}
+
+.eyeBtn:focus {
+  outline: none;
+}
+
+.phoneWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.phonePrefix {
+  position: absolute;
+  left: 12px;
+  color: #4a5568;
+  font-weight: 500;
+  pointer-events: none; /* Allows click to pass through to input */
+  z-index: 1; /* Ensure it's above the input border */
+}
+
+.phoneInput {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 3.5rem; /* Extra left padding for +91 */
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.2s;
+  outline: none;
+}
+
+.phoneInput:focus {
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+}

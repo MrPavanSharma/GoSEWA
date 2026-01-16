@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getSystemMetrics, getSystemHealth } from '../services/admin.service';
 import { Activity, Server, Database, Zap } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+
 
 const AdminSystemPage: React.FC = () => {
     const [metrics, setMetrics] = useState<any>(null);

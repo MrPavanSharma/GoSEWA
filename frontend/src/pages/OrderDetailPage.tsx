@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getOrderById, cancelOrder, trackOrder } from '../services/order.service';
-import { ArrowLeft, Package, MapPin, CreditCard, Truck, CheckCircle } from 'lucide-react';
+import { ArrowLeft, MapPin, CreditCard, Truck } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const OrderDetailPage: React.FC = () => {
