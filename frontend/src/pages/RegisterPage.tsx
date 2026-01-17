@@ -18,7 +18,7 @@ const RegisterPage: React.FC = () => {
   const handleGoogleSuccess = async (credentialResponse: any) => {
     try {
       const { credential } = credentialResponse;
-      const res = await axios.post('http://localhost:5000/api/auth/google', { token: credential });
+      const res = await axios.post('http://localhost:3000/api/v1/auth/google', { token: credential });
       if (res.data.success) {
         localStorage.setItem('token', res.data.data.token);
         localStorage.setItem('user', JSON.stringify(res.data.data.user));
@@ -102,12 +102,12 @@ const RegisterPage: React.FC = () => {
             <div className={styles.formGroup} style={{ flex: 1 }}>
               <label className={styles.label}>Contact Number</label>
               <div className={styles.phoneWrapper}>
-                  <span className={styles.phonePrefix}>+91</span>
-                  <input
-                    type="text"
-                    className={styles.phoneInput}
-                    {...formik.getFieldProps("phone")}
-                  />
+                <span className={styles.phonePrefix}>+91</span>
+                <input
+                  type="text"
+                  className={styles.phoneInput}
+                  {...formik.getFieldProps("phone")}
+                />
               </div>
               {formik.touched.phone && formik.errors.phone && (
                 <div className={styles.error}>{formik.errors.phone}</div>
@@ -130,20 +130,20 @@ const RegisterPage: React.FC = () => {
           <div className={styles.formGroup}>
             <label className={styles.label}>Password</label>
             <div className={styles.passwordWrapper}>
-                <input 
-                    type={showPassword ? "text" : "password"} 
-                    className={styles.input} 
-                    {...formik.getFieldProps('password')} 
-                />
-                <button 
-                    type="button" 
-                    className={styles.eyeBtn}
-                    onMouseDown={() => setShowPassword(true)}
-                    onMouseUp={() => setShowPassword(false)}
-                    onMouseLeave={() => setShowPassword(false)}
-                >
-                    {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
-                </button>
+              <input
+                type={showPassword ? "text" : "password"}
+                className={styles.input}
+                {...formik.getFieldProps('password')}
+              />
+              <button
+                type="button"
+                className={styles.eyeBtn}
+                onMouseDown={() => setShowPassword(true)}
+                onMouseUp={() => setShowPassword(false)}
+                onMouseLeave={() => setShowPassword(false)}
+              >
+                {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
+              </button>
             </div>
             {formik.touched.password && formik.errors.password && <div className={styles.error}>{formik.errors.password}</div>}
           </div>
@@ -151,20 +151,20 @@ const RegisterPage: React.FC = () => {
           <div className={styles.formGroup}>
             <label className={styles.label}>Confirm Password</label>
             <div className={styles.passwordWrapper}>
-                <input 
-                    type={showConfirmPassword ? "text" : "password"} 
-                    className={styles.input} 
-                    {...formik.getFieldProps('confirmPassword')} 
-                />
-                <button 
-                    type="button" 
-                    className={styles.eyeBtn}
-                    onMouseDown={() => setShowConfirmPassword(true)}
-                    onMouseUp={() => setShowConfirmPassword(false)}
-                    onMouseLeave={() => setShowConfirmPassword(false)}
-                >
-                    {showConfirmPassword ? <Eye size={20} /> : <EyeOff size={20} />}
-                </button>
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                className={styles.input}
+                {...formik.getFieldProps('confirmPassword')}
+              />
+              <button
+                type="button"
+                className={styles.eyeBtn}
+                onMouseDown={() => setShowConfirmPassword(true)}
+                onMouseUp={() => setShowConfirmPassword(false)}
+                onMouseLeave={() => setShowConfirmPassword(false)}
+              >
+                {showConfirmPassword ? <Eye size={20} /> : <EyeOff size={20} />}
+              </button>
             </div>
             {formik.touched.confirmPassword && formik.errors.confirmPassword && <div className={styles.error}>{formik.errors.confirmPassword}</div>}
           </div>
@@ -175,13 +175,13 @@ const RegisterPage: React.FC = () => {
         </form>
 
         <div style={{ margin: '1.5rem 0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <GoogleLogin
-                text="signup_with"
-                onSuccess={handleGoogleSuccess}
-                onError={() => {
-                    toast.error('Google Login connection failed');
-                }}
-            />
+          <GoogleLogin
+            text="signup_with"
+            onSuccess={handleGoogleSuccess}
+            onError={() => {
+              toast.error('Google Login connection failed');
+            }}
+          />
         </div>
 
         <div className={styles.link}>

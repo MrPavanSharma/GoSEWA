@@ -3,7 +3,12 @@ const { hashPassword, comparePassword, generateToken } = require('../utils/authU
 
 exports.register = async (req, res) => {
   try {
-    const { email, password, phone, user_type, name } = req.body;
+    const { email, password, phone, user_type, full_name, name } = req.body;
+
+    // Handle both full_name (from service) and name (potential other sources)
+    const nameToSave = full_name || name;
+
+    console.log('Registering user:', { email, phone, user_type, nameToSave });
 
     // Check if user exists
     const existingUser = await User.findOne({ where: { email } });
@@ -24,7 +29,7 @@ exports.register = async (req, res) => {
       password_hash: hashedPassword,
       phone,
       user_type,
-      full_name: name
+      full_name: nameToSave
     });
 
     const token = generateToken(user);
@@ -42,6 +47,7 @@ exports.register = async (req, res) => {
       }
     });
   } catch (error) {
+    console.error('Registration Error Stack:', error);
     res.status(500).json({ success: false, error: error.message });
   }
 };
@@ -82,7 +88,7 @@ exports.login = async (req, res) => {
 exports.googleLogin = async (req, res) => {
   try {
     const { token } = req.body;
-    
+
     // Verify Google Token
     const axios = require('axios');
     const response = await axios.get(`https://oauth2.googleapis.com/tokeninfo?id_token=${token}`);
@@ -94,7 +100,7 @@ exports.googleLogin = async (req, res) => {
       // Create new user if not exists
       // Using 'google_auth_placeholder' for password since they login via Google
       const hashedPassword = await hashPassword(require('crypto').randomBytes(16).toString('hex'));
-      
+
       user = await User.create({
         email,
         password_hash: hashedPassword,
