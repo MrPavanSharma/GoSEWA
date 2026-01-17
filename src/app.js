@@ -86,8 +86,8 @@ app.get('/', (req, res) => {
   res.send('GoSEWA Backend is running. Access the Frontend at <a href="http://localhost:5173">http://localhost:5173</a>');
 });
 
-app.get('/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date() });
+app.get('/api/v1/health', (req, res) => {
+  res.json({ status: 'healthy', timestamp: new Date() });
 });
 
 // Global Error Handler

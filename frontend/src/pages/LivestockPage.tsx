@@ -51,20 +51,20 @@ const LivestockPage: React.FC = () => {
     const fetchLivestock = async () => {
         try {
             setLoading(true);
-            const res = await getLivestock({ 
-                page, 
-                limit, 
-                search: searchTerm, 
+            const res = await getLivestock({
+                page,
+                limit,
+                search: searchTerm,
                 status: statusFilter,
-                breed: breedFilter 
+                breed: breedFilter
             });
-            
+
             if (res.success) {
                 setLivestock(res.data.data || []);
                 if (res.data.pagination) {
                     setTotalPages(res.data.pagination.totalPages);
                 } else if (res.pagination) {
-                     setTotalPages(res.pagination.totalPages);
+                    setTotalPages(res.pagination.totalPages);
                 }
             } else if (Array.isArray(res)) {
                 setLivestock(res);
@@ -204,7 +204,7 @@ const LivestockPage: React.FC = () => {
         setSearchTerm(e.target.value);
         setPage(1);
     };
-    
+
     // ... helper for pagination
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= totalPages) {
@@ -219,18 +219,18 @@ const LivestockPage: React.FC = () => {
     return (
         <div>
             {/* Search and Filter Controls */}
-            <div style={{marginBottom: '1.5rem', display: 'flex', gap: '1rem', flexWrap: 'wrap'}}>
-                <input 
-                    type="text" 
-                    placeholder="Search by Tag ID, RFID, Name..." 
+            <div style={{ marginBottom: '1.5rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                <input
+                    type="text"
+                    placeholder="Search by Tag ID, RFID, Name..."
                     value={searchTerm}
                     onChange={handleSearchChange}
-                    style={{padding: '0.5rem', borderRadius: '6px', border: '1px solid #e2e8f0', flex: 1, minWidth: '200px'}}
+                    style={{ padding: '0.5rem', borderRadius: '6px', border: '1px solid #e2e8f0', flex: 1, minWidth: '200px' }}
                 />
-                <select 
-                    value={statusFilter} 
+                <select
+                    value={statusFilter}
                     onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
-                    style={{padding: '0.5rem', borderRadius: '6px', border: '1px solid #e2e8f0', minWidth: '150px'}}
+                    style={{ padding: '0.5rem', borderRadius: '6px', border: '1px solid #e2e8f0', minWidth: '150px' }}
                 >
                     <option value="">All Statuses</option>
                     <option value="MILKING">Milking</option>
@@ -240,14 +240,14 @@ const LivestockPage: React.FC = () => {
                     <option value="SOLD">Sold</option>
                     <option value="DEAD">Dead</option>
                 </select>
-                <input 
-                    type="text" 
-                    placeholder="Filter by Breed..." 
+                <input
+                    type="text"
+                    placeholder="Filter by Breed..."
                     value={breedFilter}
                     onChange={(e) => { setBreedFilter(e.target.value); setPage(1); }}
-                    style={{padding: '0.5rem', borderRadius: '6px', border: '1px solid #e2e8f0', minWidth: '150px'}}
+                    style={{ padding: '0.5rem', borderRadius: '6px', border: '1px solid #e2e8f0', minWidth: '150px' }}
                 />
-                <button 
+                <button
                     onClick={() => {
                         setEditId(null);
                         livestockForm.resetForm();
@@ -266,38 +266,38 @@ const LivestockPage: React.FC = () => {
                         marginLeft: 'auto'
                     }}
                 >
-                    <span style={{fontSize: '1.2rem', lineHeight: 1}}>+</span> Add Animal
+                    <span style={{ fontSize: '1.2rem', lineHeight: 1 }}>+</span> Add Animal
                 </button>
             </div>
 
             {/* Livestock Table View */}
-            <div style={{overflowX: 'auto', background: 'white', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)'}}>
-                <table style={{width: '100%', borderCollapse: 'collapse', minWidth: '800px'}}>
+            <div style={{ overflowX: 'auto', background: 'white', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '800px' }}>
                     <thead>
-                        <tr style={{background: '#f8fafc', borderBottom: '1px solid #e2e8f0'}}>
-                            <th style={{padding: '1rem', textAlign: 'left', fontWeight: 600, color: '#4a5568'}}>Tag ID</th>
-                            <th style={{padding: '1rem', textAlign: 'left', fontWeight: 600, color: '#4a5568'}}>RFID</th>
-                            <th style={{padding: '1rem', textAlign: 'left', fontWeight: 600, color: '#4a5568'}}>Type/Breed</th>
-                            <th style={{padding: '1rem', textAlign: 'left', fontWeight: 600, color: '#4a5568'}}>Group</th>
-                            <th style={{padding: '1rem', textAlign: 'left', fontWeight: 600, color: '#4a5568'}}>Status</th>
-                            <th style={{padding: '1rem', textAlign: 'left', fontWeight: 600, color: '#4a5568'}}>Lactation</th>
-                            <th style={{padding: '1rem', textAlign: 'right', fontWeight: 600, color: '#4a5568'}}>Actions</th>
+                        <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
+                            <th style={{ padding: '1rem', textAlign: 'left', fontWeight: 600, color: '#4a5568' }}>Tag ID</th>
+                            <th style={{ padding: '1rem', textAlign: 'left', fontWeight: 600, color: '#4a5568' }}>RFID</th>
+                            <th style={{ padding: '1rem', textAlign: 'left', fontWeight: 600, color: '#4a5568' }}>Type/Breed</th>
+                            <th style={{ padding: '1rem', textAlign: 'left', fontWeight: 600, color: '#4a5568' }}>Group</th>
+                            <th style={{ padding: '1rem', textAlign: 'left', fontWeight: 600, color: '#4a5568' }}>Status</th>
+                            <th style={{ padding: '1rem', textAlign: 'left', fontWeight: 600, color: '#4a5568' }}>Lactation</th>
+                            <th style={{ padding: '1rem', textAlign: 'right', fontWeight: 600, color: '#4a5568' }}>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {livestock.map((animal) => (
-                            <tr key={animal.id} style={{borderBottom: '1px solid #e2e8f0'}}>
-                                <td style={{padding: '1rem'}}>
-                                    <div style={{fontWeight: 500, color: '#2d3748'}}>{animal.tag_id}</div>
-                                    <div style={{fontSize: '0.875rem', color: '#718096'}}>{animal.gender}</div>
+                            <tr key={animal.id} style={{ borderBottom: '1px solid #e2e8f0' }}>
+                                <td style={{ padding: '1rem' }}>
+                                    <div style={{ fontWeight: 500, color: '#2d3748' }}>{animal.tag_id}</div>
+                                    <div style={{ fontSize: '0.875rem', color: '#718096' }}>{animal.gender}</div>
                                 </td>
-                                <td style={{padding: '1rem', color: '#4a5568'}}>{animal.rfid_tag || '-'}</td>
-                                <td style={{padding: '1rem'}}>
+                                <td style={{ padding: '1rem', color: '#4a5568' }}>{animal.rfid_tag || '-'}</td>
+                                <td style={{ padding: '1rem' }}>
                                     <div>{animal.type}</div>
-                                    <div style={{fontSize: '0.875rem', color: '#718096'}}>{animal.breed}</div>
+                                    <div style={{ fontSize: '0.875rem', color: '#718096' }}>{animal.breed}</div>
                                 </td>
-                                <td style={{padding: '1rem', color: '#4a5568'}}>{animal.current_group || '-'}</td>
-                                <td style={{padding: '1rem'}}>
+                                <td style={{ padding: '1rem', color: '#4a5568' }}>{animal.current_group || '-'}</td>
+                                <td style={{ padding: '1rem' }}>
                                     <span style={{
                                         padding: '0.25rem 0.75rem',
                                         borderRadius: '9999px',
@@ -309,13 +309,13 @@ const LivestockPage: React.FC = () => {
                                         {animal.current_status}
                                     </span>
                                 </td>
-                                <td style={{padding: '1rem', color: '#4a5568'}}>{animal.lactation_number || 0}</td>
-                                <td style={{padding: '1rem', textAlign: 'right'}}>
-                                    <div style={{display: 'flex', gap: '0.5rem', justifyContent: 'flex-end'}}>
-                                        <button onClick={() => handleEdit(animal)} style={{padding: '0.5rem', background: '#edf2f7', border: 'none', borderRadius: '4px', cursor: 'pointer'}}>
+                                <td style={{ padding: '1rem', color: '#4a5568' }}>{animal.lactation_number || 0}</td>
+                                <td style={{ padding: '1rem', textAlign: 'right' }}>
+                                    <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
+                                        <button onClick={() => handleEdit(animal)} style={{ padding: '0.5rem', background: '#edf2f7', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
                                             <Edit size={16} />
                                         </button>
-                                        <button onClick={() => handleDelete(animal.id)} style={{padding: '0.5rem', background: '#fee2e2', color: '#ef4444', border: 'none', borderRadius: '4px', cursor: 'pointer'}}>
+                                        <button onClick={() => handleDelete(animal.id)} style={{ padding: '0.5rem', background: '#fee2e2', color: '#ef4444', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
                                             <Trash2 size={16} />
                                         </button>
                                     </div>
@@ -327,22 +327,22 @@ const LivestockPage: React.FC = () => {
             </div>
 
             {/* Pagination Controls */}
-            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1.5rem'}}>
-                <div style={{color: '#718096', fontSize: '0.875rem'}}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1.5rem' }}>
+                <div style={{ color: '#718096', fontSize: '0.875rem' }}>
                     Page {page} of {totalPages}
                 </div>
-                <div style={{display: 'flex', gap: '0.5rem'}}>
-                    <button 
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <button
                         onClick={() => handlePageChange(page - 1)}
                         disabled={page === 1}
-                        style={{padding: '0.5rem 1rem', border: '1px solid #e2e8f0', borderRadius: '6px', background: page === 1 ? '#f7fafc' : 'white', cursor: page === 1 ? 'not-allowed' : 'pointer'}}
+                        style={{ padding: '0.5rem 1rem', border: '1px solid #e2e8f0', borderRadius: '6px', background: page === 1 ? '#f7fafc' : 'white', cursor: page === 1 ? 'not-allowed' : 'pointer' }}
                     >
                         Previous
                     </button>
-                    <button 
+                    <button
                         onClick={() => handlePageChange(page + 1)}
                         disabled={page === totalPages}
-                        style={{padding: '0.5rem 1rem', border: '1px solid #e2e8f0', borderRadius: '6px', background: page === totalPages ? '#f7fafc' : 'white', cursor: page === totalPages ? 'not-allowed' : 'pointer'}}
+                        style={{ padding: '0.5rem 1rem', border: '1px solid #e2e8f0', borderRadius: '6px', background: page === totalPages ? '#f7fafc' : 'white', cursor: page === totalPages ? 'not-allowed' : 'pointer' }}
                     >
                         Next
                     </button>
@@ -365,23 +365,23 @@ const LivestockPage: React.FC = () => {
                     justifyContent: 'center',
                     zIndex: 1000
                 }}>
-                    <div style={{background: 'white', padding: '2rem', borderRadius: '12px', width: '500px', maxHeight: '90vh', overflowY: 'auto'}}>
-                        <h2 style={{margin: '0 0 1.5rem 0'}}>{editId ? 'Edit Livestock' : 'Add New Livestock'}</h2>
+                    <div style={{ background: 'white', padding: '2rem', borderRadius: '12px', width: '500px', maxHeight: '90vh', overflowY: 'auto' }}>
+                        <h2 style={{ margin: '0 0 1.5rem 0' }}>{editId ? 'Edit Livestock' : 'Add New Livestock'}</h2>
                         <form onSubmit={livestockForm.handleSubmit}>
-                            <div style={{marginBottom: '1rem'}}>
-                                <label style={{display: 'block', marginBottom: '0.5rem', fontWeight: 500}}>Tag ID</label>
+                            <div style={{ marginBottom: '1rem' }}>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Tag ID</label>
                                 <input
                                     type="text"
                                     {...livestockForm.getFieldProps('tag_id')}
-                                    style={{width: '100%', padding: '0.75rem', border: '1px solid #e2e8f0', borderRadius: '8px'}}
+                                    style={{ width: '100%', padding: '0.75rem', border: '1px solid #e2e8f0', borderRadius: '8px' }}
                                 />
                             </div>
 
-                            <div style={{marginBottom: '1rem'}}>
-                                <label style={{display: 'block', marginBottom: '0.5rem', fontWeight: 500}}>Type</label>
+                            <div style={{ marginBottom: '1rem' }}>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Type</label>
                                 <select
                                     {...livestockForm.getFieldProps('type')}
-                                    style={{width: '100%', padding: '0.75rem', border: '1px solid #e2e8f0', borderRadius: '8px'}}
+                                    style={{ width: '100%', padding: '0.75rem', border: '1px solid #e2e8f0', borderRadius: '8px' }}
                                 >
                                     <option value="COW">Cow</option>
                                     <option value="BUFFALO">Buffalo</option>
@@ -390,25 +390,25 @@ const LivestockPage: React.FC = () => {
                                 </select>
                             </div>
 
-                            <div style={{marginBottom: '1rem'}}>
-                                <label style={{display: 'block', marginBottom: '0.5rem', fontWeight: 500}}>Breed</label>
+                            <div style={{ marginBottom: '1rem' }}>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Breed</label>
                                 <input
                                     type="text"
                                     {...livestockForm.getFieldProps('breed')}
-                                    style={{width: '100%', padding: '0.75rem', border: '1px solid #e2e8f0', borderRadius: '8px'}}
+                                    style={{ width: '100%', padding: '0.75rem', border: '1px solid #e2e8f0', borderRadius: '8px' }}
                                 />
                             </div>
 
-                            <div style={{marginBottom: '1rem'}}>
-                                <label style={{display: 'block', marginBottom: '0.5rem', fontWeight: 500}}>Age (years)</label>
+                            <div style={{ marginBottom: '1rem' }}>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Age (years)</label>
                                 <input
                                     type="number"
                                     {...livestockForm.getFieldProps('age')}
-                                    style={{width: '100%', padding: '0.75rem', border: '1px solid #e2e8f0', borderRadius: '8px'}}
+                                    style={{ width: '100%', padding: '0.75rem', border: '1px solid #e2e8f0', borderRadius: '8px' }}
                                 />
                             </div>
 
-                            <div style={{display: 'flex', gap: '1rem', marginTop: '1.5rem'}}>
+                            <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
                                 <button
                                     type="submit"
                                     style={{
@@ -447,9 +447,8 @@ const LivestockPage: React.FC = () => {
                             </div>
                         </form>
                     </div>
-
-
-            {/* Health Record Modal */}
+                </div>
+            )}
             {showHealthForm && selectedAnimal && (
                 <div style={{
                     position: 'fixed',
@@ -463,46 +462,46 @@ const LivestockPage: React.FC = () => {
                     justifyContent: 'center',
                     zIndex: 1000
                 }}>
-                    <div style={{background: 'white', padding: '2rem', borderRadius: '12px', width: '500px'}}>
-                        <h2 style={{margin: '0 0 1.5rem 0'}}>Add Health Record - {selectedAnimal.tag_id}</h2>
+                    <div style={{ background: 'white', padding: '2rem', borderRadius: '12px', width: '500px' }}>
+                        <h2 style={{ margin: '0 0 1.5rem 0' }}>Add Health Record - {selectedAnimal.tag_id}</h2>
                         <form onSubmit={healthForm.handleSubmit}>
-                            <div style={{marginBottom: '1rem'}}>
-                                <label style={{display: 'block', marginBottom: '0.5rem', fontWeight: 500}}>Checkup Date</label>
+                            <div style={{ marginBottom: '1rem' }}>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Checkup Date</label>
                                 <input
                                     type="date"
                                     {...healthForm.getFieldProps('checkup_date')}
-                                    style={{width: '100%', padding: '0.75rem', border: '1px solid #e2e8f0', borderRadius: '8px'}}
+                                    style={{ width: '100%', padding: '0.75rem', border: '1px solid #e2e8f0', borderRadius: '8px' }}
                                 />
                             </div>
 
-                            <div style={{marginBottom: '1rem'}}>
-                                <label style={{display: 'block', marginBottom: '0.5rem', fontWeight: 500}}>Diagnosis</label>
+                            <div style={{ marginBottom: '1rem' }}>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Diagnosis</label>
                                 <textarea
                                     {...healthForm.getFieldProps('diagnosis')}
                                     rows={3}
-                                    style={{width: '100%', padding: '0.75rem', border: '1px solid #e2e8f0', borderRadius: '8px'}}
+                                    style={{ width: '100%', padding: '0.75rem', border: '1px solid #e2e8f0', borderRadius: '8px' }}
                                 />
                             </div>
 
-                            <div style={{marginBottom: '1rem'}}>
-                                <label style={{display: 'block', marginBottom: '0.5rem', fontWeight: 500}}>Treatment</label>
+                            <div style={{ marginBottom: '1rem' }}>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Treatment</label>
                                 <textarea
                                     {...healthForm.getFieldProps('treatment')}
                                     rows={2}
-                                    style={{width: '100%', padding: '0.75rem', border: '1px solid #e2e8f0', borderRadius: '8px'}}
+                                    style={{ width: '100%', padding: '0.75rem', border: '1px solid #e2e8f0', borderRadius: '8px' }}
                                 />
                             </div>
 
-                            <div style={{marginBottom: '1rem'}}>
-                                <label style={{display: 'block', marginBottom: '0.5rem', fontWeight: 500}}>Vet Name</label>
+                            <div style={{ marginBottom: '1rem' }}>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Vet Name</label>
                                 <input
                                     type="text"
                                     {...healthForm.getFieldProps('vet_name')}
-                                    style={{width: '100%', padding: '0.75rem', border: '1px solid #e2e8f0', borderRadius: '8px'}}
+                                    style={{ width: '100%', padding: '0.75rem', border: '1px solid #e2e8f0', borderRadius: '8px' }}
                                 />
                             </div>
 
-                            <div style={{display: 'flex', gap: '1rem', marginTop: '1.5rem'}}>
+                            <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
                                 <button
                                     type="submit"
                                     style={{

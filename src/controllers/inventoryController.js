@@ -116,10 +116,10 @@ exports.getProducts = async (req, res) => {
 exports.getProductDetails = async (req, res) => {
   try {
     const product = await Product.findByPk(req.params.id, {
-        include: [
-            { model: Category },
-            { model: ProductImage }
-        ]
+      include: [
+        { model: Category },
+        { model: ProductImage }
+      ]
     });
     if (!product) return res.status(404).json({ success: false, message: 'Product not found' });
     res.json({ success: true, data: product });
@@ -138,24 +138,24 @@ exports.updateInventory = async (req, res) => {
 
     // Verify ownership
     if (product.gaushala_id !== req.user.id) {
-        return res.status(403).json({ success: false, message: 'Access denied.' });
+      return res.status(403).json({ success: false, message: 'Access denied.' });
     }
 
     const newQuantity = parseFloat(product.available_quantity) + parseFloat(quantity_change);
 
     if (newQuantity < 0) {
-        return res.status(400).json({ success: false, message: 'Insufficient stock for this operation.' });
+      return res.status(400).json({ success: false, message: 'Insufficient stock for this operation.' });
     }
 
     await product.update({ available_quantity: newQuantity });
 
     await InventoryLog.create({
-        product_id: id,
-        quantity_change,
-        new_quantity: newQuantity,
-        change_type,
-        notes,
-        created_by: req.user.id
+      product_id: id,
+      quantity_change,
+      new_quantity: newQuantity,
+      change_type,
+      notes,
+      created_by: req.user.id
     });
 
     res.json({ success: true, message: 'Inventory updated', data: { available_quantity: newQuantity } });
@@ -166,14 +166,14 @@ exports.updateInventory = async (req, res) => {
 };
 
 exports.getInventoryLogs = async (req, res) => {
-    try {
-        const { id } = req.params; // Product ID
-        const logs = await InventoryLog.findAll({
-            where: { product_id: id },
-            order: [['created_at', 'DESC']]
-        });
-        res.json({ success: true, data: logs });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
+  try {
+    const { id } = req.params; // Product ID
+    const logs = await InventoryLog.findAll({
+      where: { product_id: id },
+      order: [['created_at', 'DESC']]
+    });
+    res.json({ success: true, data: logs });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
 };

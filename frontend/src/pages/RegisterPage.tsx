@@ -41,8 +41,12 @@ const RegisterPage: React.FC = () => {
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Required"),
-      email: Yup.string().email("Invalid email").required("Required"),
-      phone: Yup.string().required("Required"),
+      email: Yup.string().email("Incorrect mail id").required("Required"),
+      phone: Yup.string()
+        .matches(/^[0-9]+$/, "Please enter correct 10 digits phone number")
+        .min(10, "Please enter correct 10 digits phone number")
+        .max(10, "Please enter correct 10 digits phone number")
+        .required("Required"),
       user_type: Yup.string().required("Required"),
       password: Yup.string()
         .min(6, "Must be 6 chars or more")

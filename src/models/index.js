@@ -107,7 +107,7 @@ Order.belongsTo(User, { as: 'Gaushala', foreignKey: 'gaushala_id' });
 Order.hasMany(OrderItem, { foreignKey: 'order_id', onDelete: 'CASCADE' });
 OrderItem.belongsTo(Order, { foreignKey: 'order_id' });
 
-Product.hasMany(OrderItem, { foreignKey: 'product_id' }); 
+Product.hasMany(OrderItem, { foreignKey: 'product_id' });
 OrderItem.belongsTo(Product, { foreignKey: 'product_id' });
 
 Order.hasMany(OrderStatusHistory, { foreignKey: 'order_id', onDelete: 'CASCADE' });
@@ -252,7 +252,7 @@ const syncDatabase = async () => {
   try {
     await sequelize.authenticate();
     console.log('Database connection accepted.');
-    await sequelize.sync({ force: false });
+    await sequelize.sync({ alter: true });
     console.log('Database synced.');
   } catch (error) {
     console.error('Unable to connect to the database:', error);
