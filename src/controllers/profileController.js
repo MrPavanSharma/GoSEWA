@@ -26,13 +26,21 @@ exports.updateProfile = async (req, res) => {
     const { 
       full_name, business_name, business_type, gst_number, pan_number, description,
       // Gaushala Fields
-      gaushala_name, gaushala_address, registration_number, establishment_year, ownership_type
+      gaushala_name, registration_number, establishment_year, ownership_type,
+      // New Address Fields
+      premises_name, street_address, state, city, pincode
     } = req.body;
 
+    console.log('DEBUG: Updating Profile for User:', req.user.id);
+    console.log('DEBUG: Payload:', { premises_name, street_address, state, city, pincode });
+
     // Update User (Base) fields
-    await User.update({
-      gaushala_name, gaushala_address, registration_number, establishment_year, ownership_type
+    const [updatedCount] = await User.update({
+      gaushala_name, registration_number, establishment_year, ownership_type,
+      premises_name, street_address, state, city, pincode
     }, { where: { id: req.user.id } });
+
+    console.log('DEBUG: User.update result:', updatedCount);
     
     let profile = await UserProfile.findOne({ where: { user_id: req.user.id } });
 

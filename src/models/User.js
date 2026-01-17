@@ -63,6 +63,26 @@ const User = sequelize.define('User', {
   ownership_type: {
     type: DataTypes.ENUM('trust', 'individual', 'private', 'government', 'ngo', 'other'),
     allowNull: true
+  },
+  premises_name: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  street_address: {
+    type: DataTypes.STRING, // or TEXT
+    allowNull: true
+  },
+  state: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  city: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  pincode: {
+    type: DataTypes.STRING,
+    allowNull: true
   }
 }, {
   timestamps: true,

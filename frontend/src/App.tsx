@@ -21,6 +21,14 @@ import NotificationsPage from './pages/NotificationsPage';
 import AdminUsersPage from './pages/AdminUsersPage';
 import AdminSystemPage from './pages/AdminSystemPage';
 
+import MilkProductionPage from './pages/MilkProductionPage';
+import BreedingPage from './pages/BreedingPage';
+import HealthPage from './pages/HealthPage';
+import FeedPage from './pages/FeedPage';
+import WorkforcePage from './pages/WorkforcePage';
+import FinancePage from './pages/FinancePage';
+import ReportsPage from './pages/ReportsPage';
+
 function App() {
   return (
     <Routes>
@@ -45,6 +53,15 @@ function App() {
             <Route path="/notifications" element={<NotificationsPage />} />
             <Route path="/admin/users" element={<AdminUsersPage />} />
             <Route path="/admin/system" element={<AdminSystemPage />} />
+            
+            <Route path="/gaushala/animals" element={<LivestockPage />} />
+            <Route path="/gaushala/milk" element={<MilkProductionPage />} />
+            <Route path="/gaushala/breeding" element={<BreedingPage />} />
+            <Route path="/gaushala/health" element={<HealthPage />} />
+            <Route path="/gaushala/feed" element={<FeedPage />} />
+            <Route path="/gaushala/workforce" element={<WorkforcePage />} />
+            <Route path="/gaushala/finance" element={<FinancePage />} />
+            <Route path="/gaushala/reports" element={<ReportsPage />} />
             {/* Add more protected routes here */}
         </Route>
       </Route>

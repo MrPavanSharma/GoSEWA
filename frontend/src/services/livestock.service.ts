@@ -4,6 +4,8 @@ export const getLivestock = async (params?: {
     status?: string;
     page?: number;
     limit?: number;
+    search?: string;
+    breed?: string;
 }) => {
     const response = await api.get('/stock/livestock', { params });
     return response.data;

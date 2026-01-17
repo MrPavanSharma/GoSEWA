@@ -4,6 +4,7 @@ const { hashPassword, comparePassword, generateToken } = require('../utils/authU
 exports.register = async (req, res) => {
   try {
     const { email, password, phone, user_type, full_name, name } = req.body;
+    console.log('Register Request Body:', req.body);
 
     // Handle both full_name (from service) and name (potential other sources)
     const nameToSave = full_name || name;

@@ -5,14 +5,17 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 router.use(authMiddleware);
 
-// Cattle
-router.post('/cattle', stockController.addCattle);
-router.get('/cattle', stockController.getCattle);
+// Livestock (Gauvansh Record)
+router.post('/livestock', stockController.addLivestock);
+router.get('/livestock', stockController.getLivestock);
+router.put('/livestock/:id', stockController.updateLivestock);
+router.delete('/livestock/:id', stockController.deleteLivestock);
 
 // Health
-router.post('/cattle/:id/health', stockController.addHealthRecord);
+router.post('/livestock/:id/health', stockController.addHealthRecord);
+router.get('/livestock/:id/health', stockController.getHealthRecords);
 
 // Milk
-router.post('/cattle/:id/milk', stockController.logMilkProduction);
+router.post('/livestock/:id/milk', stockController.logMilkProduction);
 
 module.exports = router;

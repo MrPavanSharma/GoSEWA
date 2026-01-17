@@ -81,7 +81,11 @@ app.use('/api/v1/reports', reportRoutes);
 console.log('Registering Monitoring Routes...');
 app.use('/api/v1/monitoring', monitoringRoutes);
 
-// Health Check
+// Root Route
+app.get('/', (req, res) => {
+  res.send('GoSEWA Backend is running. Access the Frontend at <a href="http://localhost:5173">http://localhost:5173</a>');
+});
+
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date() });
 });
